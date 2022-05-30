@@ -1,15 +1,23 @@
 module.exports = (app) => {
   app
     .route('/category')
+    .all(app.middleware.loginRequired.authenticate)
+    .all(app.middleware.admin.admin)
     .get(app.controllers.category.get)
     .post(app.controllers.category.save);
-  app.route('/category/tree').get(app.controllers.category.getTree);
+  app
+    .route('/category/tree')
+    .all(app.middleware.loginRequired.authenticate)
+    .get(app.controllers.category.getTree);
   app
     .route('/category/:id')
+    .all(app.middleware.loginRequired.authenticate)
     .get(app.controllers.category.getById)
+    .all(app.middleware.admin.admin)
     .put(app.controllers.category.update)
     .delete(app.controllers.category.remove);
   app
     .route('/category/:id/articles')
+    .all(app.middleware.loginRequired.authenticate)
     .get(app.controllers.category.getByCategory);
 };
