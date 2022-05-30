@@ -1,4 +1,5 @@
 const Category = require('../models/Category');
+const Article = require('../models/Article');
 
 module.exports = () => {
   const save = async (req, res) => {
@@ -122,6 +123,21 @@ module.exports = () => {
     }
   };
 
+  const getByCategory = async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+
+      const article = await Article.findAll({
+        attributes: ['id', 'name', 'description'],
+        where: { category_id: id },
+      });
+
+      return res.json(article);
+    } catch (e) {
+      return res.json(null);
+    }
+  };
+
   return {
     save,
     get,
@@ -129,5 +145,6 @@ module.exports = () => {
     getById,
     update,
     remove,
+    getByCategory,
   };
 };

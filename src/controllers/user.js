@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Article = require('../models/Article');
 
 module.exports = () => {
   const save = async (req, res) => {
@@ -65,7 +66,16 @@ module.exports = () => {
       if (!user) {
         return res.status(400).json({ errors: ['Usuário não existe.'] });
       }
-      const { id, name, email, admin } = await user.update({ deleted: true });
+      const { id } = user;
+      const article = await Article.findAll({
+        where: { user_id: id },
+      });
+
+      if (article > 0) {
+        return res.status(400).json({ errors: ['Usuário possui artigos.'] });
+      }
+
+      const { name, email, admin } = await user.update({ deleted: true });
       return res.json({ id, name, email, admin });
     } catch (e) {
       return res.status(400).json(null);

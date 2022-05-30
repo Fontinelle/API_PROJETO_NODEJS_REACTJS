@@ -9,4 +9,7 @@ module.exports = (app) => {
     .get(app.controllers.category.getById)
     .put(app.controllers.category.update)
     .delete(app.controllers.category.remove);
+  app
+    .route('/category/:id/articles')
+    .get(app.controllers.category.getByCategory);
 };
