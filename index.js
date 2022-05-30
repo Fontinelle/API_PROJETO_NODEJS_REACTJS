@@ -10,7 +10,11 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.json());
 app.use(cors());
 
-consign({ cwd: 'src' }).into(app);
+consign({ cwd: 'src' })
+  .then('database/index.js')
+  .then('controllers')
+  .then('routes')
+  .into(app);
 
 app.listen(PORT, () => {
   console.log('Backend...');
